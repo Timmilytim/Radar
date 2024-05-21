@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Ticketing System</string>
+    <!--    <string name="facebook">facebookicon</string>-->
+    <string name="login">Login</string>
+    <string name="signup">Sign up</string>
+    <string name="welcome">WELCOME</string>
+    <string name="hello">Hello </string>
+    <string name="balance">$00.0</string>
+    <string name="first">First Name</string>
+    <string name="username">Username</string>
+    <string name="last">Last Name</string>
+    <string name="Login_info">Login with your information</string>
+    <string name="Signup_info">Register with your information</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="Phone">Phone Number</string>
+    <string name="confirm">Confirm Password</string>
+    <string name="remember">Remember Me</string>
+    <string name="forgot">Forgot Password?</string>
+    <string name="account">Don\'t have an account?</string>
+    <string name="account1">Have an account?</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="submit">Submit</string>
+    <string name="book">Book your Ticket Today</string>
+    <string name="tripType">Trip Type</string>
+    <string name="one">One-Way</string>
+    <string name="round">Round-Trip</string>
+    <string name="ow">one_way</string>
+    <string name="rw">round_trip</string>
+    <string name="multiple">Multiple Locations</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="location">Location</string>
+    <string name="day">Day</string>
+    <string name="date">Date</string>
+    <string name="price">Price</string>
+    <string name="select">Select Date</string>
+    <string name="time">Date &amp; Time </string>
+    <string name="ticket">Number of Tickets</string>
+    <string name="bookT">Book Ticket</string>
+    <string name="confirmT">Confirm Ticket</string>
+    <string name="purchase">Purchase</string>
+    <string name="fund">Fund</string>
+    <string name="amount">Amount to be funded</string>
+    <string name="transfer">Transfer</string>
+    <string name="booking">Booking</string>
+    <string name="wallet">Wallet</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="history">History</string>
+    <string name="logout">Log Out</string>
+    <string name="contents">Contents...</string>
+
+    <string-array name="locations">
+        <item>Mushin</item>
+        <item>Costain</item>
+        <item>Ilupeju</item>
+        <item>Oshodi</item>
+        <item>Yaba</item>
+
+    </string-array>
+
+
+    <string-array name="tickets">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>
