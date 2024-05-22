@@ -50,16 +50,16 @@ public class MainActivity extends AppCompatActivity {
         //        TO SWITCH TO DASHBOARD
         lbutton.setOnClickListener(v -> {
             // Email and Password
-            EditText lUser = (EditText)findViewById(R.id.loginUsername);
+            EditText lUser = findViewById(R.id.loginUsername);
             String lu = lUser.getText().toString();
 
-            EditText lPassword = (EditText)findViewById(R.id.loginPassword);
+            EditText lPassword = findViewById(R.id.loginPassword);
             String lp = lPassword.getText().toString();
 
 
             JSONObject jsonBody = new JSONObject();
             try {
-                jsonBody.put("username", lu);
+                jsonBody.put("email", lu);
                 jsonBody.put("password", lp);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -72,16 +72,22 @@ public class MainActivity extends AppCompatActivity {
 
                             // Extract user details from the response
                             int userId = response.optInt("user_id");
-                            String email = response.optString("email");
                             String username = response.optString("username");
-                            double balance = response.optDouble("balance");
+                            String firstname = response.optString("first_name");
+                            String lastname = response.optString("last_name");
+                            String email = response.optString("email");
+                            String phone = response.optString("phone_number");
+//                            double balance = response.optDouble("balance");
 
                             // Store the details in UserSession
                             UserSession userSession = UserSession.getInstance();
                             userSession.setUserId(userId);
-                            userSession.setEmail(email);
                             userSession.setUsername(username);
-                            userSession.setBalance(balance);
+                            userSession.setFirstname(firstname);
+                            userSession.setLastname(lastname);
+                            userSession.setEmail(email);
+                            userSession.setPhone(phone);
+//                            userSession.setBalance(balance);
 
                             // Start the Dashboard activity
                             Intent i1 = new Intent(getApplicationContext(), Dashboard.class);

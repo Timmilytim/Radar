@@ -3,6 +3,7 @@ package com.example.ticketingsystem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +19,12 @@ public class Settings extends AppCompatActivity {
     private LinearLayout booking;
     private LinearLayout wallet;
     private LinearLayout history;
-    private TextView logout;
+    private TextView firstName;
+    private  TextView lastName;
+    private TextView username;
+    private TextView email;
+    private  TextView phone;
+    private Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +37,32 @@ public class Settings extends AppCompatActivity {
             return insets;
         });
 
+        firstName = findViewById(R.id.first_name);
+        lastName = findViewById(R.id.last_name);
+        username = findViewById(R.id.username);
+        email = findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
         booking = findViewById(R.id.booking);
         wallet =  findViewById(R.id.wallet);
         history = findViewById(R.id.history);
         logout = findViewById(R.id.logout);
+
+        UserSession userSession = UserSession.getInstance();
+
+        String fName = userSession.getFirstname();
+        firstName.setText(fName);
+
+        String lName = userSession.getLastname();
+        lastName.setText(lName);
+
+        String uName = userSession.getUsername();
+        username.setText(uName);
+
+        String eAddress = userSession.getUsername();
+        email.setText(eAddress);
+
+        String pNumber = userSession.getPhone();
+        phone.setText(pNumber);
 
 //  SWITCHING INTENTS FROM THE SWITCH CLASS
         logout.setOnClickListener(view -> handleLogout());
