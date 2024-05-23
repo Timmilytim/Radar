@@ -58,7 +58,7 @@ public class Settings extends AppCompatActivity {
         String uName = userSession.getUsername();
         username.setText(uName);
 
-        String eAddress = userSession.getUsername();
+        String eAddress = userSession.getEmail();
         email.setText(eAddress);
 
         String pNumber = userSession.getPhone();

@@ -90,7 +90,7 @@
                                 android:layout_centerVertical="true"
                                 android:text="@string/from"
                                 android:textSize="18sp"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -122,7 +122,7 @@
                                 android:layout_centerVertical="true"
                                 android:text="@string/to"
                                 android:textSize="18sp"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -152,7 +152,7 @@
                                 android:layout_centerVertical="true"
                                 android:text="@string/tripType"
                                 android:textSize="18sp"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -182,7 +182,7 @@
                                 android:layout_centerVertical="true"
                                 android:textSize="18sp"
                                 android:text="@string/date"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -212,7 +212,7 @@
                                 android:layout_centerVertical="true"
                                 android:text="@string/balance"
                                 android:textSize="18sp"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="bold" />
 
                         </RelativeLayout>

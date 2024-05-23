@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Ticketing System</string>
     <!--    <string name="facebook">facebookicon</string>-->
+    <string name="radar">Radar</string>
     <string name="login">Login</string>
     <string name="signup">Sign up</string>
     <string name="welcome">WELCOME</string>

@@ -71,13 +71,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Response", "LOGIN SUCCESSFUL" + response.toString());
 
                             // Extract user details from the response
-                            int userId = response.optInt("user_id");
-                            String username = response.optString("username");
-                            String firstname = response.optString("first_name");
-                            String lastname = response.optString("last_name");
-                            String email = response.optString("email");
-                            String phone = response.optString("phone_number");
-//                            double balance = response.optDouble("balance");
+                            JSONObject userInfo = response.getJSONObject("user_info");
+                            int userId = userInfo.optInt("user_id");
+                            String username = userInfo.optString("username");
+                            String firstname = userInfo.optString("first_name");
+                            String lastname = userInfo.optString("last_name");
+                            String email = userInfo.optString("email");
+                            String phone = userInfo.optString("phone_number");
+                            double balance = userInfo.optDouble("wallet_balance");
 
                             // Store the details in UserSession
                             UserSession userSession = UserSession.getInstance();
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                             userSession.setLastname(lastname);
                             userSession.setEmail(email);
                             userSession.setPhone(phone);
-//                            userSession.setBalance(balance);
+                            userSession.setBalance(balance);
 
                             // Start the Dashboard activity
                             Intent i1 = new Intent(getApplicationContext(), Dashboard.class);
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException | JSONException e) {
                         e.printStackTrace();
                     }
+                }else if (error instanceof com.android.volley.NoConnectionError) {
+                    errorMessage = "No internet connection. Please check your connection and try again.";
                 }
 
                 errorMsg.setText(errorMessage);
@@ -121,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
             queue.add(jsonObjectRequest);
 
-            Intent i1 = new Intent(getApplicationContext(), Dashboard.class);
-            i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i1);
-            finish();
+//            Intent i1 = new Intent(getApplicationContext(), Dashboard.class);
+//            i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(i1);
+//            finish();
         });
 
         switchPage.setOnClickListener(view -> Switch.goToSignUp(MainActivity.this));
