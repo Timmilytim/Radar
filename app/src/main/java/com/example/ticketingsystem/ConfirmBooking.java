@@ -1,8 +1,6 @@
 package com.example.ticketingsystem;
 
-//import static com.example.ticketingsystem.URL.BOOKING;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,7 +69,7 @@ public class ConfirmBooking extends AppCompatActivity {
 
         purchase.setOnClickListener(v -> {
 
-            Intent intent = new Intent(ConfirmBooking.this, Payment.class);
+            Intent intent = new Intent(ConfirmBooking.this, Success.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

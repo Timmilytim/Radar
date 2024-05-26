@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -76,10 +78,13 @@ public class Wallet extends AppCompatActivity {
 
 
 
-        fund.setOnClickListener(v -> fundWallet());
+        fund.setOnClickListener(v -> {
+
+            fundWallet();});
         pay.setOnClickListener(v-> payFunds());
 
-        transfer.setOnClickListener(v-> transferCash());
+        transfer.setOnClickListener(v-> {
+            transferCash();});
         tf.setOnClickListener(v -> send());
 
 //  SWITCHING THE INTENT FROM THE SWITCH CLASS
@@ -90,27 +95,34 @@ public class Wallet extends AppCompatActivity {
         settings.setOnClickListener(view -> Switch.goToSettings(Wallet.this));
     }
 
-    public static void transferCash() {
+    public void transferCash() {
         if (transferView.getVisibility() == View.GONE) {
+            inAnimation(transferView);
             transferView.setVisibility(View.VISIBLE);
             if (fundView.getVisibility() == View.VISIBLE) {
+
                 fundView.setVisibility(View.GONE);
             }
         } else {
+            outAnimation(transferView);
             transferView.setVisibility(View.GONE);
         }
     }
 
-    public static void fundWallet() {
+    public void fundWallet() {
         if (fundView.getVisibility() == View.GONE) {
+            inAnimation(fundView);
             fundView.setVisibility(View.VISIBLE);
             if (transferView.getVisibility() == View.VISIBLE) {
+
                 transferView.setVisibility(View.GONE);
             }
         } else {
+            outAnimation(fundView);
             fundView.setVisibility(View.GONE);
         }
     }
+
 
     public void payFunds(){
 
@@ -177,6 +189,16 @@ public class Wallet extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
+    }
+
+    private void inAnimation(CardView cardView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.in);
+        cardView.startAnimation(animation);
+    }
+
+    private void outAnimation(CardView cardView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.out);
+        cardView.startAnimation(animation);
     }
 
 }
