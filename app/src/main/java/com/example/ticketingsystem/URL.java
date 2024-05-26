@@ -14,4 +14,6 @@ public class URL {
     public static final String TRANSFER = "";
 
     public static final String  VERIFICATION ="https://habeeb1234.pythonanywhere.com/verify_payment/";
+
+    public static final String HISTORY = "";
 }
