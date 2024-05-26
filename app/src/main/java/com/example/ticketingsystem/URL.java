@@ -12,4 +12,6 @@ public class URL {
     public static final String FUND = "https://habeeb1234.pythonanywhere.com/top_up_wallet/";
 
     public static final String TRANSFER = "";
+
+    public static final String  VERIFICATION ="https://habeeb1234.pythonanywhere.com/verify_payment/";
 }

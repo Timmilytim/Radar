@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     response -> {
                         try {
                             Log.d("Response", "LOGIN SUCCESSFUL" + response.toString());
+                            Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL ", Toast.LENGTH_LONG).show();
 
                             // Extract user details from the response
                             JSONObject userInfo = response.getJSONObject("user_info");
@@ -108,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         body = new String(error.networkResponse.data, "UTF-8");
                         JSONObject errorJson = new JSONObject(body);
-                        errorMessage = errorJson.optString("message", "An error occurred.");
+                        errorMessage = errorJson.optString("message");
+
                     } catch (UnsupportedEncodingException | JSONException e) {
                         e.printStackTrace();
                     }

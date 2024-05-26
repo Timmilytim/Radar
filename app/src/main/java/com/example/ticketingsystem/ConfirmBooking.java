@@ -70,6 +70,11 @@ public class ConfirmBooking extends AppCompatActivity {
 
 
         purchase.setOnClickListener(v -> {
+
+            Intent intent = new Intent(ConfirmBooking.this, Payment.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
 //            JSONObject jsonBody = new JSONObject();
 //            try {
 //                jsonBody.get("from_loc");
