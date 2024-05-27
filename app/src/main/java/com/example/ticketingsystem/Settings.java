@@ -89,7 +89,7 @@ public class Settings extends AppCompatActivity {
         userSession.setUsername(null);
         userSession.setBalance(0.0);
 
-        Intent intent = new Intent(Settings.this, Success.class);
+        Intent intent = new Intent(Settings.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

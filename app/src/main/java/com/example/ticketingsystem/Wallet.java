@@ -1,7 +1,8 @@
 package com.example.ticketingsystem;
 
+import static com.example.ticketingsystem.URL.CREDIT;
+import static com.example.ticketingsystem.URL.DEBIT;
 import static com.example.ticketingsystem.URL.FUND;
-import static com.example.ticketingsystem.URL.TRANSFER;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -125,7 +127,6 @@ public class Wallet extends AppCompatActivity {
 
 
     public void payFunds(){
-
         UserSession userSession = UserSession.getInstance();
         int userId = userSession.getUserId();
         String email = userSession.getEmail();
@@ -156,6 +157,7 @@ public class Wallet extends AppCompatActivity {
                     }
                 }, error -> {
             Log.e("Error", "Error occurred: ", error);
+            Toast.makeText(this, "Failed to fund wallet", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -172,18 +174,21 @@ public class Wallet extends AppCompatActivity {
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("userId", userId);
-            jsonBody.put("username", un);
             jsonBody.put("amount", tfa);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, TRANSFER, jsonBody,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, DEBIT, jsonBody,
                 response -> {
-                        Log.d("Response", "TRANSFER SUCCESSFUL: " + response.toString());
+                         String reference = response.optString("reference");
+                         int amount = response.optInt("amount");
+                        Log.d("Response", "PENDING" + response.toString());
+                        credit(un,reference, amount);
 
                 }, error -> {
             Log.e("Error", "Error occurred: ", error);
+            Toast.makeText(this, "Failed to debit account", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -199,6 +204,32 @@ public class Wallet extends AppCompatActivity {
     private void outAnimation(CardView cardView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.out);
         cardView.startAnimation(animation);
+    }
+
+    private void credit (String username, String reference, int amount){
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("receiver_username", username);
+            jsonBody.put("reference", reference);
+            jsonBody.put("amount", amount);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CREDIT, jsonBody,
+                response -> {
+                    String success = response.optString("message");
+                    Log.d("Response", "TRANSFER SUCCESSFUL: " + response.toString());
+                    Toast.makeText(this, success.toString(), Toast.LENGTH_SHORT).show();
+
+                }, error -> {
+            Log.e("Error", "Error occurred: ", error);
+            Toast.makeText(this, "Failed to credit account", Toast.LENGTH_SHORT).show();
+
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 
 }

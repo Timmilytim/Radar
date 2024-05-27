@@ -1,21 +1,36 @@
 package com.example.ticketingsystem;
 
+import static com.example.ticketingsystem.URL.HISTORY;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.WindowDecorActionBar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class History extends AppCompatActivity {
 
     private LinearLayout booking;
     private LinearLayout wallet;
     private LinearLayout settings;
+
+    private TextView loadHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,38 +46,50 @@ public class History extends AppCompatActivity {
         booking = findViewById(R.id.booking);
         wallet = findViewById(R.id.wallet);
         settings = findViewById(R.id.settings);
+        loadHistory =  findViewById(R.id.appHistory);
+
+
 
 //        NAVIGATING TO THE Booking INTENT
-        booking.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
+        booking.setOnClickListener(view -> {
 
-                Intent i5 = new Intent(getApplicationContext(), Dashboard.class);
-                startActivity(i5);
+            Intent i5 = new Intent(getApplicationContext(), Dashboard.class);
+            startActivity(i5);
 
-            }
         });
 
 //  SWITCHING THE INTENT FROM THE SWITCH CLASS
-        booking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Switch.goToBooking(History.this);
-            }
+        booking.setOnClickListener(view -> Switch.goToBooking(History.this));
+
+        wallet.setOnClickListener(view -> Switch.goToWallet(History.this));
+
+        settings.setOnClickListener(view -> Switch.goToSettings(History.this));
+    }
+
+    private void fetchHistory() {
+        UserSession userSession = UserSession.getInstance();
+        int userId = userSession.getUserId();
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("user_id", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, HISTORY, jsonBody,
+                response -> {
+                    try {
+                        String historyData = response.getString("data");
+                        loadHistory.setText(historyData);
+                    } catch (JSONException e) {
+                        Log.e("History", "Error parsing response", e);
+                    }
+                }, error -> {
+            Log.e("History", "Error occurred: ", error);
         });
 
-        wallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Switch.goToWallet(History.this);
-            }
-        });
-
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Switch.goToSettings(History.this);
-            }
-        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 }

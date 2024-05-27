@@ -18,7 +18,7 @@
     <string name="confirm">Confirm Password</string>
     <string name="remember">Remember Me</string>
     <string name="forgot">Forgot Password?</string>
-    <string name="account">Don\'t have an account?</string>
+    <string name="account">Don\'t have an account?\u00A0 Sign Up</string>
     <string name="account1">Have an account?</string>
     <string name="weight">Weight</string>
     <string name="height">Height</string>
@@ -51,6 +51,7 @@
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="history">History</string>
+    <string name="lHistory">Loading history...</string>
     <string name="logout">Log Out</string>
     <string name="contents">Contents...</string>
     <string name="successful">Payment Successful</string>
