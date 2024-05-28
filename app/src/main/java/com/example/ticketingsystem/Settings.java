@@ -67,11 +67,20 @@ public class Settings extends AppCompatActivity {
 //  SWITCHING INTENTS FROM THE SWITCH CLASS
         logout.setOnClickListener(view -> handleLogout());
 
-        booking.setOnClickListener(view -> Switch.goToBooking(Settings.this));
+        booking.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToBooking(Settings.this);
+        });
 
-        wallet.setOnClickListener(view -> Switch.goToWallet(Settings.this));
+        wallet.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToWallet(Settings.this);
+        });
 
-        history.setOnClickListener(view -> Switch.goToHistory(Settings.this));
+        history.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToHistory(Settings.this);
+        });
 
 
     }
@@ -83,6 +92,7 @@ public class Settings extends AppCompatActivity {
     }
 
     public void handleLogout(){
+        Loader.showLoader(this);
         UserSession userSession = UserSession.getInstance();
         userSession.setUserId(0);
         userSession.setEmail(null);

@@ -23,7 +23,7 @@
     <string name="weight">Weight</string>
     <string name="height">Height</string>
     <string name="submit">Submit</string>
-    <string name="book">Book your Ticket Today</string>
+    <string name="book">Book your Ticket</string>
     <string name="tripType">Trip Type</string>
     <string name="one">One-Way</string>
     <string name="round">Round-Trip</string>

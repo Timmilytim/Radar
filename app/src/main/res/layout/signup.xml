@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -13,235 +13,262 @@
         android:layout_height="wrap_content"
         android:alpha="0.94">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="20dp">
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/register"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signup"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="32sp"
-                android:textColor="@color/white"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true">
 
-        </LinearLayout>
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="28dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="50dp">
-
-            <LinearLayout
+           <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="28dp"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/welcome"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="30sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Signup_info"
-                    android:textColor="@color/black"
-                    />
+                android:orientation="vertical">
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/first"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:id="@+id/firstName"
-                    android:textColor="@color/black"/>
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/last"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:id="@+id/lastName"
-                    android:textColor="@color/black"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:id="@+id/username"
-                    android:textColor="@color/black"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:id="@+id/email"
-                    android:textColor="@color/black"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Phone"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:id="@+id/phone"
-                    android:textColor="@color/black"
-                    />
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:id="@+id/password"
-                    android:textColor="@color/black"/>
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirm"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:id="@+id/confirm"
-                    android:textColor="@color/black"/>
-
-                <TextView
-                    android:id="@+id/passwordChecker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="@color/red"
-                    />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left">
-
-                    <TextView
-                        android:id="@+id/switchPagetoLogin"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="@string/account1"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="20dp">
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/register"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/signup"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:textSize="32sp"
+                            android:textColor="@color/white"/>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="15dp"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:cornerRadius="32dp"
-                    android:text="@string/signup"
-                    android:backgroundTint="@color/green"
-                    android:textColor="@color/white"
-                    android:id="@+id/signup"/>
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"/>
+                    </LinearLayout>
 
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="28dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginBottom="50dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="28dp"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/welcome"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:textSize="30sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Signup_info"
+                                android:textColor="@color/black"
+                                />
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/first"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:id="@+id/firstName"
+                                android:textColor="@color/black"/>
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/last"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:id="@+id/lastName"
+                                android:textColor="@color/black"/>
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/username"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:id="@+id/username"
+                                android:textColor="@color/black"/>
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textEmailAddress"
+                                android:id="@+id/email"
+                                android:textColor="@color/black"/>
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Phone"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:id="@+id/phone"
+                                android:textColor="@color/black"
+                                />
+
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/password"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:id="@+id/password"
+                                android:textColor="@color/black"/>
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/confirm"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:id="@+id/confirm"
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/passwordChecker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textColor="@color/red"
+                                />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left">
+
+                                <TextView
+                                    android:id="@+id/switchPagetoLogin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:text="@string/account1"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="15dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                app:cornerRadius="32dp"
+                                android:text="@string/signup"
+                                android:backgroundTint="@color/green"
+                                android:textColor="@color/white"
+                                android:id="@+id/signup"/>
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="10dp"/>
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                   </LinearLayout>
+
+        </ScrollView>
 
     </RelativeLayout>
 
-</ScrollView>
+    <!-- Loader -->
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

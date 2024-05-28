@@ -25,12 +25,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class Dashboard extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton oneWay;
     private RadioButton roundTrip;
+    private MaterialButton fund;
     private Button submit;
 
     @Override
@@ -55,7 +58,7 @@ public class Dashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        LocalTime currentTime = LocalTime.now();
         UserSession userSession = UserSession.getInstance();
 
         uName = findViewById(R.id.uName);
@@ -70,8 +73,11 @@ public class Dashboard extends AppCompatActivity {
         oneWay = findViewById(R.id.one_button);
         roundTrip = findViewById(R.id.round_button);
         submit = findViewById(R.id.submit);
+        fund = findViewById(R.id.fund);
 
-        String userName = "Hello " + userSession.getUsername();
+        String time =  greeting(currentTime);
+
+        String userName = time + userSession.getUsername();
         uName.setText(userName);
 
         String balance = "\u20A6" + userSession.getBalance();
@@ -93,15 +99,37 @@ public class Dashboard extends AppCompatActivity {
         submit.setOnClickListener(v -> handleSubmit());
 
 //SWITCHING THE INTENT FROM THE SWITCH CLASS
-        wallet.setOnClickListener(view -> Switch.goToWallet(Dashboard.this));
+        wallet.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToWallet(Dashboard.this);});
 
-        history.setOnClickListener(view -> Switch.goToHistory(Dashboard.this));
+        history.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToHistory(Dashboard.this);});
 
-        settings.setOnClickListener(view -> Switch.goToSettings(Dashboard.this));
+        settings.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToSettings(Dashboard.this);});
+
+        fund.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToWallet(Dashboard.this);
+        });
 
     }
 
     // METHODS
+
+    public static String greeting( LocalTime currentTime){
+        if (currentTime.isBefore(LocalTime.NOON)){
+            return "Good Morning ";
+        } else if (currentTime.isBefore(LocalTime.of(17,00))) {
+            return "Good Afternoon ";
+        }else {
+            return "Good Evening ";
+        }
+    }
+
     private void showDatePicker(){
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -119,6 +147,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void handleSubmit() {
+        Loader.showLoader(this);
         String selectedDateStr = date.getText().toString();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -169,7 +198,7 @@ public class Dashboard extends AppCompatActivity {
             String finalTo = to;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, PRICE, jsonBody,
                 response -> {
-                    Log.d("Response", "BOOKING SUCCESSFUL" + response.toString());
+                    Log.d("Response", "CONFIRM BOOKING" + response.toString());
                     String price = response.optString("price");
 
                     Intent i1 = new Intent(getApplicationContext(), ConfirmBooking.class);

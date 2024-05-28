@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,8 @@ public class History extends AppCompatActivity {
             return insets;
         });
 
+        fetchHistory();
+
         booking = findViewById(R.id.booking);
         wallet = findViewById(R.id.wallet);
         settings = findViewById(R.id.settings);
@@ -50,23 +53,26 @@ public class History extends AppCompatActivity {
 
 
 
-//        NAVIGATING TO THE Booking INTENT
+//  SWITCHING THE INTENT FROM THE SWITCH CLASS
         booking.setOnClickListener(view -> {
-
-            Intent i5 = new Intent(getApplicationContext(), Dashboard.class);
-            startActivity(i5);
-
+            Loader.showLoader(this);
+            Switch.goToBooking(History.this);
         });
 
-//  SWITCHING THE INTENT FROM THE SWITCH CLASS
-        booking.setOnClickListener(view -> Switch.goToBooking(History.this));
+        wallet.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToWallet(History.this);
+        });
 
-        wallet.setOnClickListener(view -> Switch.goToWallet(History.this));
-
-        settings.setOnClickListener(view -> Switch.goToSettings(History.this));
+        settings.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToSettings(History.this);
+        });
     }
 
     private void fetchHistory() {
+
+        Loader.showLoader(this);
         UserSession userSession = UserSession.getInstance();
         int userId = userSession.getUserId();
 
@@ -80,13 +86,16 @@ public class History extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, HISTORY, jsonBody,
                 response -> {
                     try {
+                        Loader.hideLoader(this);
                         String historyData = response.getString("data");
                         loadHistory.setText(historyData);
                     } catch (JSONException e) {
                         Log.e("History", "Error parsing response", e);
                     }
                 }, error -> {
+            Loader.hideLoader(this);
             Log.e("History", "Error occurred: ", error);
+            Toast.makeText(this, "Fail to Load History Data", Toast.LENGTH_SHORT).show();
         });
 
         RequestQueue queue = Volley.newRequestQueue(this);

@@ -23,8 +23,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -90,11 +92,20 @@ public class Wallet extends AppCompatActivity {
         tf.setOnClickListener(v -> send());
 
 //  SWITCHING THE INTENT FROM THE SWITCH CLASS
-        booking.setOnClickListener(view -> Switch.goToBooking(Wallet.this));
+        booking.setOnClickListener(view ->{
+            Loader.showLoader(this);
+            Switch.goToBooking(Wallet.this);
+        });
 
-        history.setOnClickListener(view -> Switch.goToHistory(Wallet.this));
+        history.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToHistory(Wallet.this);
+        });
 
-        settings.setOnClickListener(view -> Switch.goToSettings(Wallet.this));
+        settings.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToSettings(Wallet.this);
+        });
     }
 
     public void transferCash() {
@@ -127,6 +138,7 @@ public class Wallet extends AppCompatActivity {
 
 
     public void payFunds(){
+        Loader.showLoader(this);
         UserSession userSession = UserSession.getInstance();
         int userId = userSession.getUserId();
         String email = userSession.getEmail();
@@ -144,6 +156,7 @@ public class Wallet extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, FUND, jsonBody,
                 response -> {
                     try {
+                        Loader.hideLoader(this);
                         Log.d("Response", "FUND SUCCESSFUL: " + response.toString());
                         String authorizationUrl = response.getString("authorization_url");
 
@@ -156,10 +169,21 @@ public class Wallet extends AppCompatActivity {
                         Log.e("Error", "Error parsing response", e);
                     }
                 }, error -> {
+            Loader.hideLoader(this);
             Log.e("Error", "Error occurred: ", error);
             Toast.makeText(this, "Failed to fund wallet", Toast.LENGTH_SHORT).show();
 
+            // To Check if it's a timeout error
+            if (error instanceof TimeoutError) {
+                Loader.hideLoader(this);
+                Toast.makeText(this, "Request timed out. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
         });
+            // To  Retry the funding 3 times
+            int maxRetries = 3;
+            int initialTimeoutMs = 5000;
+            float backoffMultiplier = 1.0f;
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxRetries, backoffMultiplier));
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
@@ -170,7 +194,7 @@ public class Wallet extends AppCompatActivity {
         int userId = userSession.getUserId();
         String un = username.getText().toString();
         int tfa = Integer.parseInt(tfAmount.getText().toString());
-
+        Loader.showLoader(this);
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("userId", userId);
@@ -183,10 +207,12 @@ public class Wallet extends AppCompatActivity {
                 response -> {
                          String reference = response.optString("reference");
                          int amount = response.optInt("amount");
+                         Loader.hideLoader(this);
                         Log.d("Response", "PENDING" + response.toString());
                         credit(un,reference, amount);
 
                 }, error -> {
+            Loader.hideLoader(this);
             Log.e("Error", "Error occurred: ", error);
             Toast.makeText(this, "Failed to debit account", Toast.LENGTH_SHORT).show();
 
@@ -207,6 +233,7 @@ public class Wallet extends AppCompatActivity {
     }
 
     private void credit (String username, String reference, int amount){
+        Loader.showLoader(this);
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("receiver_username", username);
@@ -218,11 +245,13 @@ public class Wallet extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CREDIT, jsonBody,
                 response -> {
+                Loader.hideLoader(this);
                     String success = response.optString("message");
                     Log.d("Response", "TRANSFER SUCCESSFUL: " + response.toString());
                     Toast.makeText(this, success.toString(), Toast.LENGTH_SHORT).show();
 
                 }, error -> {
+            Loader.hideLoader(this);
             Log.e("Error", "Error occurred: ", error);
             Toast.makeText(this, "Failed to credit account", Toast.LENGTH_SHORT).show();
 

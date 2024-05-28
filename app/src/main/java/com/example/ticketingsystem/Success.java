@@ -41,10 +41,24 @@ public class Success extends AppCompatActivity {
             finish();
         });
 
+
     }
 
     private void animate(CardView cardView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
         cardView.startAnimation(animation);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        home();  // Log out the user
+    }
+
+    public void home(){
+        Intent intent = new Intent(Success.this, Dashboard.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

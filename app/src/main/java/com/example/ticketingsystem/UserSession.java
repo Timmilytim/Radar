@@ -12,7 +12,7 @@ public class UserSession {
     private double balance;
 
 
-    private UserSession() {
+    UserSession() {
         // Private constructor to prevent instantiation
     }
 

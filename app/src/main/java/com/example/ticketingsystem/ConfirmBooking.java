@@ -1,6 +1,8 @@
 package com.example.ticketingsystem;
 
 
+import static com.example.ticketingsystem.URL.BOOKING;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,32 +70,41 @@ public class ConfirmBooking extends AppCompatActivity {
 
 
         purchase.setOnClickListener(v -> {
+            UserSession userSession = new UserSession();
+            int userId = userSession.getUserId();
+
+
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("user_id", userId);
+                jsonBody.put("from_loc", checkOutFrom);
+                jsonBody.put("to_loc", checkOutTo);
+                jsonBody.put("transport_date", checkOutDate);
+                jsonBody.put("trip_type", checkOutTrip);
+                jsonBody.put("price", price);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BOOKING, jsonBody,
+                    response -> {
+                        Log.d("Response", "BOOKING SUCCESSFUL" + response.toString());
+                                Intent intent = new Intent(ConfirmBooking.this, Success.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                    }, error -> {
+                Log.e("Error", "Error occurred", error);
+            });
+
+            RequestQueue queue = Volley.newRequestQueue(ConfirmBooking.this);
+            queue.add(jsonObjectRequest);
+
 
             Intent intent = new Intent(ConfirmBooking.this, Success.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
-//            JSONObject jsonBody = new JSONObject();
-//            try {
-//                jsonBody.get("from_loc");
-//                jsonBody.put("to_loc", checkOutTo);
-//                jsonBody.put("transport_date", checkOutDate);
-//                jsonBody.put("trip_type", checkOutTrip);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BOOKING, jsonBody,
-//                    response -> {
-//                        Log.d("Response", "BOOKING SUCCESSFUL" + response.toString());
-////                        Intent i1 = new Intent(getApplicationContext(), ConfirmBooking.class);
-////                        startActivity(i1);
-//                    }, error -> {
-//                Log.e("Error", "Error occurred", error);
-//            });
-//
-//            RequestQueue queue = Volley.newRequestQueue(ConfirmBooking.this);
-//            queue.add(jsonObjectRequest);
         });
     }
 

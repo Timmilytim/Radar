@@ -44,70 +44,72 @@ public class signup extends AppCompatActivity {
 
         TextView switchPage = (TextView)findViewById(R.id.switchPagetoLogin);
 
-        switchPage.setOnClickListener(view -> Switch.goToLogin(signup.this));
+        switchPage.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            Switch.goToLogin(signup.this);});
 
-        signup.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                // Calling all ids and converting them to Strings
-                EditText firstName = (EditText)findViewById(R.id.firstName);
-                String fn = firstName.getText().toString();
+        signup.setOnClickListener(view -> {
+            Loader.showLoader(this);
+            // Calling all ids and converting them to Strings
+            EditText firstName = (EditText)findViewById(R.id.firstName);
+            String fn = firstName.getText().toString();
 
-                EditText lastName = (EditText)findViewById(R.id.lastName);
-                String ln = lastName.getText().toString();
+            EditText lastName = (EditText)findViewById(R.id.lastName);
+            String ln = lastName.getText().toString();
 
-                EditText userName = (EditText) findViewById(R.id.username);
-                String un = userName.getText().toString();
+            EditText userName = (EditText) findViewById(R.id.username);
+            String un = userName.getText().toString();
 
-                EditText emailAddress = (EditText)findViewById(R.id.email);
-                String em = emailAddress.getText().toString();
+            EditText emailAddress = (EditText)findViewById(R.id.email);
+            String em = emailAddress.getText().toString();
 
-                EditText phoneNumber = (EditText)findViewById(R.id.phone);
-                String pn = phoneNumber.getText().toString();
+            EditText phoneNumber = (EditText)findViewById(R.id.phone);
+            String pn = phoneNumber.getText().toString();
 
-                EditText password = (EditText)findViewById(R.id.password);
-                String ps = password.getText().toString();
+            EditText password = (EditText)findViewById(R.id.password);
+            String ps = password.getText().toString();
 
-                EditText conPassword = (EditText)findViewById(R.id.confirm);
-                String cps = conPassword.getText().toString();
+            EditText conPassword = (EditText)findViewById(R.id.confirm);
+            String cps = conPassword.getText().toString();
 
-                TextView passChecker = (TextView)findViewById(R.id.passwordChecker);
+            TextView passChecker = (TextView)findViewById(R.id.passwordChecker);
 
 
 //                PASSWORD CHECKER
-                String checker = null;
-                if(!ps.equals(cps)){
-                    checker = "Make sure your password is corresponding";
-                } else {
-                    JSONObject jsonBody = new JSONObject();
-                    try {
-                        jsonBody.put("first_name", fn);
-                        jsonBody.put("last_name", ln);
-                        jsonBody.put("username", un);
-                        jsonBody.put("email", em);
-                        jsonBody.put("phone_number", pn);
-                        jsonBody.put("password", cps);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, SIGNUP, jsonBody,
-                            response -> {
-                                Log.d("Response", "SIGN UP SUCCESSFUL" + response.toString());
-                                Intent i1 = new Intent(getApplicationContext(), MainActivity.class);
-                                i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i1);
-                                finish();
-                            }, error -> {
-                        Log.e("Error", "Error occurred", error);
-                    });
-
-                    RequestQueue queue = Volley.newRequestQueue(signup.this);
-                    queue.add(jsonObjectRequest);
+            String checker = null;
+            if(!ps.equals(cps)){
+                checker = "Make sure your password is corresponding";
+            } else {
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("first_name", fn);
+                    jsonBody.put("last_name", ln);
+                    jsonBody.put("username", un);
+                    jsonBody.put("email", em);
+                    jsonBody.put("phone_number", pn);
+                    jsonBody.put("password", cps);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Loader.hideLoader(this);
                 }
-                passChecker.setText(checker);
-            }
 
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, SIGNUP, jsonBody,
+                        response -> {
+                            Log.d("Response", "SIGN UP SUCCESSFUL" + response.toString());
+                            Loader.hideLoader(this);
+                            Intent i1 = new Intent(getApplicationContext(), MainActivity.class);
+                            i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i1);
+                            finish();
+                        }, error -> {
+                    Log.e("Error", "Error occurred", error);
+                    Loader.hideLoader(this);
+                });
+
+                RequestQueue queue = Volley.newRequestQueue(signup.this);
+                queue.add(jsonObjectRequest);
+            }
+            passChecker.setText(checker);
         });
 
 

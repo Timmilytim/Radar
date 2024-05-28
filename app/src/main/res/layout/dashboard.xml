@@ -26,6 +26,34 @@
                 android:gravity="center"
                 android:padding="25dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/radarwhite" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="1dp"
+                        android:text="@string/radar"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="30sp"/>
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -39,28 +67,16 @@
                         android:textStyle="bold"
                         android:textColor="@color/white"/>
 
-
-                    <TextView
-                        android:id="@+id/balance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/balance"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:textColor="@color/white"/>
                 </RelativeLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingRight="40sp"
-                    android:paddingBottom="8dp"
                     android:text="@string/book"
                     android:textColor="@color/white"
-                    android:textSize="40sp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:textSize="42sp"
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
@@ -68,7 +84,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="28dp"
                     app:cardBackgroundColor="@color/white"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -94,38 +110,36 @@
                                     android:id="@+id/radio_group"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center">
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
 
                                     <RadioButton
                                         android:id="@+id/one_button"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginEnd="35dp"
+                                        android:buttonTint="@color/white"
                                         android:checked="true"
                                         android:text="@string/one"
                                         android:textColor="@color/white"
                                         android:textSize="15sp"
-                                        android:textStyle="bold"
-                                        android:buttonTint="@color/white"
-                                        android:layout_marginEnd="35dp"
-                                        />
+                                        android:textStyle="bold" />
 
                                     <RadioButton
                                         android:id="@+id/round_button"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="35dp"
+                                        android:layout_toEndOf="@id/one_button"
+                                        android:buttonTint="@color/white"
                                         android:checked="false"
                                         android:text="@string/round"
                                         android:textColor="@color/white"
-                                        android:buttonTint="@color/white"
                                         android:textSize="15sp"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="35dp"
-                                        android:layout_toEndOf="@id/one_button"/>
+                                        android:textStyle="bold" />
                                 </RadioGroup>
                             </RelativeLayout>
                         </androidx.cardview.widget.CardView>
-
 
 
                         <!--                    FROM-->
@@ -136,9 +150,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
                             android:text="@string/from"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
 
                         <Spinner
                             android:id="@+id/from_spinner"
@@ -150,15 +164,15 @@
 
                         <View
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"/>
+                            android:layout_height="30dp" />
 
                         <!--                    TO-->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
                             android:text="@string/to"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
 
                         <Spinner
                             android:id="@+id/to_spinner"
@@ -168,45 +182,86 @@
 
                         <View
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"/>
+                            android:layout_height="30dp" />
 
                         <!--                    DEPARTURE-->
                         <TextView
                             android:layout_width="37dp"
                             android:layout_height="24dp"
                             android:text="@string/day"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/select"
-                            android:focusable="false"
                             android:clickable="true"
-                            android:inputType="none"
+                            android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:textColor="@color/black"/>
+                            android:hint="@string/select"
+                            android:inputType="none"
+                            android:textColor="@color/black" />
 
                         <View
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"/>
+                            android:layout_height="30dp" />
 
 
                         <Button
                             android:id="@+id/submit"
-                            android:backgroundTint="@color/green"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:backgroundTint="@color/green"
                             android:text="@string/submit"
-                            android:textColor="@color/white"
-                            android:layout_alignParentEnd="true"/>
-
-
+                            android:textColor="@color/white" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Balance"
+                    android:layout_marginBottom="-22dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                 <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                     <TextView
+                         android:id="@+id/balance"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:layout_marginTop="22dp"
+                         android:layout_gravity="center_horizontal"
+                         android:text="@string/balance"
+                         android:textColor="@color/white"
+                         android:textSize="20sp"
+                         android:textStyle="bold" />
+
+                     <com.google.android.material.button.MaterialButton
+                         android:id="@+id/fund"
+                         android:backgroundTint="@color/white"
+                         android:layout_width="160dp"
+                         android:layout_height="50dp"
+                         android:text="Fund Wallet"
+                         android:textStyle="bold"
+                         android:textColor="@color/green"
+                         android:layout_alignParentEnd="true"
+                         android:textSize="20sp"
+                         app:cornerRadius="12dp"/>
+                </RelativeLayout>
+
 
             </LinearLayout>
         </ScrollView>
