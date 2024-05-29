@@ -49,16 +49,18 @@
                 app:cardBackgroundColor="@color/white"
                 android:layout_margin="16dp">
 
-                <TextView
-                    android:id="@+id/appHistory"
+                <LinearLayout
+                    android:id="@+id/historyLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="@string/lHistory"
-                    android:textAlignment="center"
-                    android:textColor="@color/green"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/green1"
+                    android:padding="16dp">
+
+
+                </LinearLayout>
+
+
 
             </androidx.cardview.widget.CardView>
 

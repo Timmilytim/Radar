@@ -1,9 +1,11 @@
 package com.example.ticketingsystem;
 //import static com.example.ticketingsystem.URL.BOOKING;
+import static com.example.ticketingsystem.URL.BALANCE;
 import static com.example.ticketingsystem.URL.PRICE;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -16,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -48,6 +51,7 @@ public class Dashboard extends AppCompatActivity {
     private MaterialButton fund;
     private Button submit;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +63,10 @@ public class Dashboard extends AppCompatActivity {
             return insets;
         });
         LocalTime currentTime = LocalTime.now();
+
         UserSession userSession = UserSession.getInstance();
+        int userId = userSession.getUserId();
+        fetchBalance(userId);
 
         uName = findViewById(R.id.uName);
         bal = findViewById(R.id.balance);
@@ -120,7 +127,8 @@ public class Dashboard extends AppCompatActivity {
 
     // METHODS
 
-    public static String greeting( LocalTime currentTime){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String greeting(LocalTime currentTime){
         if (currentTime.isBefore(LocalTime.NOON)){
             return "Good Morning ";
         } else if (currentTime.isBefore(LocalTime.of(17,00))) {
@@ -140,8 +148,10 @@ public class Dashboard extends AppCompatActivity {
                 (view, year1, month1, dayOfMonth) -> {
                     String selectedDate = dayOfMonth +"-"+ (month1 + 1) +"-"+ year1;
                     date.setText(selectedDate);
+                    Log.d("testdate", selectedDate);
                 },
                year, month, day
+
                 );
         datePicker.show();
     }
@@ -202,6 +212,7 @@ public class Dashboard extends AppCompatActivity {
                     String price = response.optString("price");
 
                     Intent i1 = new Intent(getApplicationContext(), ConfirmBooking.class);
+
                     i1.putExtra("from", finalFrom);
                     i1.putExtra("to", finalTo);
                     i1.putExtra("date", selectedDateStr);
@@ -223,6 +234,36 @@ public class Dashboard extends AppCompatActivity {
                 cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
                 cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
     }
+
+    private void fetchBalance(int userId) {
+        Loader.showLoader(this);
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("user_id", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BALANCE, jsonBody,
+                response -> {
+                    try {
+                        Loader.hideLoader(this);
+                        String balance = response.getString("balance");
+                        bal.setText( "\u20A6"+ balance);
+                    } catch (JSONException e) {
+                        Log.e("Balance", "Error parsing response", e);
+                    }
+                }, error -> {
+            Loader.hideLoader(this);
+            Log.e("Balance", "Error occurred: ", error);
+            Toast.makeText(this, "Failed to Load Balance Data", Toast.LENGTH_SHORT).show();
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+    }
+
 
 }
 

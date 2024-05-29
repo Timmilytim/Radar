@@ -93,13 +93,7 @@ public class Settings extends AppCompatActivity {
 
     public void handleLogout(){
         Loader.showLoader(this);
-        UserSession userSession = UserSession.getInstance();
-        userSession.setUserId(0);
-        userSession.setEmail(null);
-        userSession.setUsername(null);
-        userSession.setBalance(0.0);
-
-        Intent intent = new Intent(Settings.this, MainActivity.class);
+         Intent intent = new Intent(Settings.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

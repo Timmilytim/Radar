@@ -68,32 +68,45 @@ public class ConfirmBooking extends AppCompatActivity {
         String price = "\u20A6"+ getIntent().getStringExtra("price");
         amount.setText(price);
 
+        int cPrice = Integer.parseInt(getIntent().getStringExtra("price"));
+
 
         purchase.setOnClickListener(v -> {
             Loader.showLoader(this);
-            UserSession userSession = new UserSession();
+            UserSession userSession = UserSession.getInstance();
             int userId = userSession.getUserId();
+            Log.d("user", String.valueOf(userId));
+            Log.d("message1", checkOutTrip.toString());
+            Log.d("message2", checkOutFrom.toString());
+            Log.d("message3", checkOutTo.toString());
+            Log.d("message4", checkOutDate.toString());
+            Log.d("message5", String.valueOf(cPrice));
 
 
             JSONObject jsonBody = new JSONObject();
             try {
                 jsonBody.put("user_id", userId);
+                jsonBody.put("trip_type", checkOutTrip);
                 jsonBody.put("from_loc", checkOutFrom);
                 jsonBody.put("to_loc", checkOutTo);
                 jsonBody.put("transport_date", checkOutDate);
-                jsonBody.put("trip_type", checkOutTrip);
-                jsonBody.put("price", price);
+                jsonBody.put("price", cPrice);
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BOOKING, jsonBody,
                     response -> {
-                        Log.d("Response", "BOOKING SUCCESSFUL" + response.toString());
-                                Intent intent = new Intent(ConfirmBooking.this, Success.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
+                        String message = response.optString("message");
+                        Log.d("Response", "BOOKING SUCCESSFUL" + message);
+
+                        Intent intent = new Intent(ConfirmBooking.this, Success.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+
                     }, error -> {
                 Loader.hideLoader(this);
                 Toast.makeText(this, "Unable to purchase ticket", Toast.LENGTH_SHORT).show();

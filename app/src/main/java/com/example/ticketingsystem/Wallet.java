@@ -1,5 +1,6 @@
 package com.example.ticketingsystem;
 
+import static com.example.ticketingsystem.URL.BALANCE;
 import static com.example.ticketingsystem.URL.CREDIT;
 import static com.example.ticketingsystem.URL.DEBIT;
 import static com.example.ticketingsystem.URL.FUND;
@@ -61,6 +62,7 @@ public class Wallet extends AppCompatActivity {
         });
 
         UserSession userSession = UserSession.getInstance();
+        int userId = userSession.getUserId();
 
         bal = findViewById(R.id.balance);
         booking = findViewById(R.id.booking);
@@ -76,11 +78,7 @@ public class Wallet extends AppCompatActivity {
         tf = findViewById(R.id.send);
         amount = findViewById(R.id.amount);
 
-        String balance = "\u20A6" + userSession.getBalance();
-
-        bal.setText(balance);
-
-
+        fetchBalance(userId);
 
         fund.setOnClickListener(v -> {
 
@@ -192,12 +190,16 @@ public class Wallet extends AppCompatActivity {
     public void send(){
         UserSession userSession = UserSession.getInstance();
         int userId = userSession.getUserId();
+        Log.d("user", String.valueOf(userId));
+
         String un = username.getText().toString();
+
         int tfa = Integer.parseInt(tfAmount.getText().toString());
+
         Loader.showLoader(this);
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("userId", userId);
+            jsonBody.put("user_id", userId);
             jsonBody.put("amount", tfa);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -207,8 +209,12 @@ public class Wallet extends AppCompatActivity {
                 response -> {
                          String reference = response.optString("reference");
                          int amount = response.optInt("amount");
+
                          Loader.hideLoader(this);
                         Log.d("Response", "PENDING" + response.toString());
+
+                        Log.d("Rusername", un);
+
                         credit(un,reference, amount);
 
                 }, error -> {
@@ -234,6 +240,11 @@ public class Wallet extends AppCompatActivity {
 
     private void credit (String username, String reference, int amount){
         Loader.showLoader(this);
+
+        Log.d("message1", username);
+        Log.d("message2", reference);
+        Log.d("message3", String.valueOf(amount));
+
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("receiver_username", username);
@@ -245,20 +256,50 @@ public class Wallet extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CREDIT, jsonBody,
                 response -> {
-                Loader.hideLoader(this);
+                    Loader.hideLoader(this);
                     String success = response.optString("message");
                     Log.d("Response", "TRANSFER SUCCESSFUL: " + response.toString());
                     Toast.makeText(this, success.toString(), Toast.LENGTH_SHORT).show();
 
                 }, error -> {
-            Loader.hideLoader(this);
-            Log.e("Error", "Error occurred: ", error);
-            Toast.makeText(this, "Failed to credit account", Toast.LENGTH_SHORT).show();
+                    Loader.hideLoader(this);
+                    Log.e("Error", "Error occurred: ", error);
+                    Toast.makeText(this, "Failed to credit account", Toast.LENGTH_SHORT).show();
 
         });
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
+
+    private void fetchBalance(int userId) {
+        Loader.showLoader(this);
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("user_id", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BALANCE, jsonBody,
+                response -> {
+                    try {
+                        Loader.hideLoader(this);
+                        String balance = response.getString("balance");
+                        bal.setText( "\u20A6"+ balance);
+                    } catch (JSONException e) {
+                        Log.e("Balance", "Error parsing response", e);
+                    }
+                }, error -> {
+            Loader.hideLoader(this);
+            Log.e("Balance", "Error occurred: ", error);
+            Toast.makeText(this, "Failed to Load Balance Data", Toast.LENGTH_SHORT).show();
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+    }
+
 
 }

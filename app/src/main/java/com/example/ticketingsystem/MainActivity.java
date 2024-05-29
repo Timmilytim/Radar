@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         userSession.setPhone(phone);
                         userSession.setBalance(balance);
 
+
                         // To Start the Dashboard activity
                         Intent i1 = new Intent(getApplicationContext(), Dashboard.class);
                         i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

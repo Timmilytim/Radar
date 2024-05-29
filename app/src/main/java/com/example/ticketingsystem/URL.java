@@ -12,6 +12,7 @@ public class URL {
     public static final String FUND = "https://habeeb1234.pythonanywhere.com/top_up_wallet/";
 
 //    public static final String  VERIFICATION ="https://habeeb1234.pythonanywhere.com/verify_payment/";
+    public static final String BALANCE = "https://habeeb1234.pythonanywhere.com/get_user_info/";
 
     public static final String HISTORY = "https://habeeb1234.pythonanywhere.com/history/";
 

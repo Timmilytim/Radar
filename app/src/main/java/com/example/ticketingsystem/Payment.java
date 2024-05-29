@@ -1,5 +1,6 @@
 package com.example.ticketingsystem;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,6 +30,22 @@ public class Payment extends AppCompatActivity {
             webSettings.setJavaScriptEnabled(true);
 
             webView.setWebViewClient(new WebViewClient());
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                // Check if payment is complete
+                if (url.contains("payment_success")) {  // Replace with actual success URL
+
+                    Intent intent = new Intent(Payment.this, Wallet.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
 
             String url = getIntent().getStringExtra("URL");
             if (url != null) {
