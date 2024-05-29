@@ -70,6 +70,7 @@ public class ConfirmBooking extends AppCompatActivity {
 
 
         purchase.setOnClickListener(v -> {
+            Loader.showLoader(this);
             UserSession userSession = new UserSession();
             int userId = userSession.getUserId();
 
@@ -94,17 +95,14 @@ public class ConfirmBooking extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                     }, error -> {
+                Loader.hideLoader(this);
+                Toast.makeText(this, "Unable to purchase ticket", Toast.LENGTH_SHORT).show();
                 Log.e("Error", "Error occurred", error);
             });
 
             RequestQueue queue = Volley.newRequestQueue(ConfirmBooking.this);
             queue.add(jsonObjectRequest);
 
-
-            Intent intent = new Intent(ConfirmBooking.this, Success.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
         });
     }
 
