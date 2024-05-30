@@ -4,6 +4,7 @@ import static com.example.ticketingsystem.URL.BALANCE;
 import static com.example.ticketingsystem.URL.CREDIT;
 import static com.example.ticketingsystem.URL.DEBIT;
 import static com.example.ticketingsystem.URL.FUND;
+import static com.example.ticketingsystem.URL.USERCHECK;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,6 +79,7 @@ public class Wallet extends AppCompatActivity {
         tf = findViewById(R.id.send);
         amount = findViewById(R.id.amount);
 
+
         fetchBalance(userId);
 
         fund.setOnClickListener(v -> {
@@ -87,7 +89,12 @@ public class Wallet extends AppCompatActivity {
 
         transfer.setOnClickListener(v-> {
             transferCash();});
-        tf.setOnClickListener(v -> send());
+
+
+        tf.setOnClickListener(v -> {
+            String un = username.getText().toString();
+            isUserExisting(un.toLowerCase());
+        });
 
 //  SWITCHING THE INTENT FROM THE SWITCH CLASS
         booking.setOnClickListener(view ->{
@@ -144,48 +151,89 @@ public class Wallet extends AppCompatActivity {
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("user_id", userId);
             jsonBody.put("email", email);
             jsonBody.put("amount", amt);
+            jsonBody.put("user_id", userId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, FUND, jsonBody,
                 response -> {
-                    try {
-                        Loader.hideLoader(this);
-                        Log.d("Response", "FUND SUCCESSFUL: " + response.toString());
-                        String authorizationUrl = response.getString("authorization_url");
+                    Loader.hideLoader(this);
+                    Log.d("Response", "FUND SUCCESSFUL: " + response.optString("authorization_url"));
 
-                        // Opening the URL in a browser through the Payment
-                        Intent intent = new Intent(Wallet.this, Payment.class);
-                        intent.putExtra("URL", authorizationUrl);
-                        startActivity(intent);
+                    String authorizationUrl = response.optString("authorization_url");
 
-                    } catch (JSONException e) {
-                        Log.e("Error", "Error parsing response", e);
-                    }
+
+                    // Opening the URL in a browser through the Payment
+                    Intent intent = new Intent(Wallet.this, Payment.class);
+                    intent.putExtra("URL", authorizationUrl);
+                    startActivity(intent);
+
                 }, error -> {
             Loader.hideLoader(this);
             Log.e("Error", "Error occurred: ", error);
             Toast.makeText(this, "Failed to fund wallet", Toast.LENGTH_SHORT).show();
 
             // To Check if it's a timeout error
-            if (error instanceof TimeoutError) {
-                Loader.hideLoader(this);
-                Toast.makeText(this, "Request timed out. Please try again later.", Toast.LENGTH_SHORT).show();
-            }
+//            if (error instanceof TimeoutError) {
+//                Loader.hideLoader(this);
+//                Toast.makeText(this, "Request timed out. Please try again later.", Toast.LENGTH_SHORT).show();
+//            }
         });
             // To  Retry the funding 3 times
-            int maxRetries = 3;
-            int initialTimeoutMs = 5000;
-            float backoffMultiplier = 1.0f;
-            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxRetries, backoffMultiplier));
+//            int maxRetries = 3;
+//            int initialTimeoutMs = 5000;
+//            float backoffMultiplier = 1.0f;
+//            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxRetries, backoffMultiplier));
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
+
+    private void isUserExisting(String username) {
+        if (username.isEmpty()) {
+            Toast.makeText(this, "Username cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }else{
+            Loader.showLoader(this);
+
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("username", username);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Log.d("isUserExisting", "URL: " + USERCHECK);
+            Log.d("isUserExisting", "Request Body: " + jsonBody.toString());
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, USERCHECK, jsonBody,
+                    response -> {
+                        Loader.hideLoader(this);
+                        String res  = response.optString("success");
+                        Log.d("isUserExisting", "Response: " + response.toString());
+                        send();
+                    }, error -> {
+                Loader.hideLoader(this);
+                if (error.networkResponse != null) {
+                    int statusCode = error.networkResponse.statusCode;
+                    Log.e("isUserExisting", "Error Status Code: " + statusCode);
+                    Log.e("isUserExisting", "Error Response Data: " + new String(error.networkResponse.data));
+                } else {
+                    Log.e("isUserExisting", "Error: ", error);
+                }
+                Toast.makeText(this, "Username does not exist", Toast.LENGTH_SHORT).show();
+            });
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(jsonObjectRequest);
+        }
+
+    }
+
+
 
     public void send(){
         UserSession userSession = UserSession.getInstance();
@@ -213,7 +261,6 @@ public class Wallet extends AppCompatActivity {
                          Loader.hideLoader(this);
                         Log.d("Response", "PENDING" + response.toString());
 
-                        Log.d("Rusername", un);
 
                         credit(un,reference, amount);
 
@@ -259,6 +306,11 @@ public class Wallet extends AppCompatActivity {
                     Loader.hideLoader(this);
                     String success = response.optString("message");
                     Log.d("Response", "TRANSFER SUCCESSFUL: " + response.toString());
+
+                    Intent intent = new Intent(Wallet.this, Wallet.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
                     Toast.makeText(this, success.toString(), Toast.LENGTH_SHORT).show();
 
                 }, error -> {
@@ -284,13 +336,9 @@ public class Wallet extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BALANCE, jsonBody,
                 response -> {
-                    try {
-                        Loader.hideLoader(this);
-                        String balance = response.getString("balance");
-                        bal.setText( "\u20A6"+ balance);
-                    } catch (JSONException e) {
-                        Log.e("Balance", "Error parsing response", e);
-                    }
+                    double balance = response.optInt("wallet_balance");
+                    bal.setText( "\u20A6"+ balance);
+                    Loader.hideLoader(this);
                 }, error -> {
             Loader.hideLoader(this);
             Log.e("Balance", "Error occurred: ", error);
@@ -300,6 +348,8 @@ public class Wallet extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
+
+
 
 
 }

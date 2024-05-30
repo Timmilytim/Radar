@@ -28,7 +28,7 @@
     <string name="one">One-Way</string>
     <string name="round">Round-Trip</string>
     <string name="ow">one_way</string>
-    <string name="rw">round_trip</string>
+    <string name="rt">round_trip</string>
     <string name="multiple">Multiple Locations</string>
     <string name="from">From</string>
     <string name="to">To</string>

@@ -84,13 +84,14 @@ public class Dashboard extends AppCompatActivity {
 
         String time =  greeting(currentTime);
 
-        String userName = time + userSession.getUsername();
+        String user = userSession.getUsername();
+        String modifiedUsername = capitalizeFirstLetter(user);
+
+        String userName = time + modifiedUsername;
         uName.setText(userName);
 
-        String balance = "\u20A6" + userSession.getBalance();
-        bal.setText(balance);
 
-        date.setOnClickListener(v -> {showDatePicker();});
+        date.setOnClickListener(v -> showDatePicker());
 
         ArrayAdapter<CharSequence> locations = ArrayAdapter.createFromResource(this, R.array.locations, android.R.layout.simple_spinner_dropdown_item);
         locations.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -99,11 +100,21 @@ public class Dashboard extends AppCompatActivity {
         fromSpinner.setAdapter(locations);
         toSpinner.setAdapter(locations);
 
+        int radioButtonId = radioGroup.getCheckedRadioButtonId();
+        String tripType;
 
-
+         if (radioButtonId == R.id.one_button) {
+                tripType = "one_way";
+            } else if (radioButtonId == R.id.round_button) {
+                tripType = "round_trip";
+            } else {
+                Toast.makeText(this, "Please select a trip type", Toast.LENGTH_SHORT).show();
+                Loader.hideLoader(this);
+                return;
+            }
 
 //SUBMITTING THE SELECTED OPTIONS
-        submit.setOnClickListener(v -> handleSubmit());
+        submit.setOnClickListener(v -> handleSubmit(tripType));
 
 //SWITCHING THE INTENT FROM THE SWITCH CLASS
         wallet.setOnClickListener(view -> {
@@ -122,6 +133,8 @@ public class Dashboard extends AppCompatActivity {
             Loader.showLoader(this);
             Switch.goToWallet(Dashboard.this);
         });
+
+
 
     }
 
@@ -148,7 +161,6 @@ public class Dashboard extends AppCompatActivity {
                 (view, year1, month1, dayOfMonth) -> {
                     String selectedDate = dayOfMonth +"-"+ (month1 + 1) +"-"+ year1;
                     date.setText(selectedDate);
-                    Log.d("testdate", selectedDate);
                 },
                year, month, day
 
@@ -156,7 +168,7 @@ public class Dashboard extends AppCompatActivity {
         datePicker.show();
     }
 
-    private void handleSubmit() {
+    private void handleSubmit(String tripType) {
         Loader.showLoader(this);
         String selectedDateStr = date.getText().toString();
 
@@ -166,6 +178,9 @@ public class Dashboard extends AppCompatActivity {
             selectedDate.setTime(sdf.parse(selectedDateStr));
         } catch (ParseException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            Loader.hideLoader(this);
+            return;
         }
 
         Calendar currentDate = Calendar.getInstance();
@@ -175,38 +190,30 @@ public class Dashboard extends AppCompatActivity {
 
         if (selectedDate.before(currentDate) && !todayDate(selectedDate, currentDate)) {
             Toast.makeText(this, "Please select a valid date", Toast.LENGTH_SHORT).show();
+            Loader.hideLoader(this);
+            return;
         } else if (from.equals(to)) {
             Toast.makeText(this, "Please select different locations", Toast.LENGTH_SHORT).show();
-        }else if (selectedDateStr.isEmpty()) {
+            Loader.hideLoader(this);
+            return;
+        } else if (selectedDateStr.isEmpty()) {
             Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
+            Loader.hideLoader(this);
+            return;
         }
-        else {
-            from = fromSpinner.getSelectedItem().toString();
-            to = toSpinner.getSelectedItem().toString();
 
-            String tripType;
-            int radioButtonId = radioGroup.getCheckedRadioButtonId();
-            if (radioButtonId == R.id.one_button) {
-                tripType = getString(R.string.ow);
-            } else if (radioButtonId == R.id.round_button) {
-                tripType = getString(R.string.rw);
-            } else {
-                tripType = "";
-            }
-
-
-            JSONObject jsonBody = new JSONObject();
+        JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("from_loc", from);
             jsonBody.put("to_loc", to);
-            jsonBody.put("trip_type",tripType);
+            jsonBody.put("trip_type", tripType);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-            String finalFrom = from;
-            String finalTo = to;
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, PRICE, jsonBody,
+        String finalFrom = from;
+        String finalTo = to;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, PRICE, jsonBody,
                 response -> {
                     Log.d("Response", "CONFIRM BOOKING" + response.toString());
                     String price = response.optString("price");
@@ -221,12 +228,13 @@ public class Dashboard extends AppCompatActivity {
                     startActivity(i1);
                 }, error -> {
             Log.e("Error", "Error occurred", error);
+            Loader.hideLoader(this);
+            Toast.makeText(this, "Failed to fetch price", Toast.LENGTH_SHORT).show();
         });
 
         RequestQueue queue = Volley.newRequestQueue(Dashboard.this);
         queue.add(jsonObjectRequest);
 
-        }
     }
 
     private boolean todayDate(Calendar cal1, Calendar cal2) {
@@ -247,13 +255,10 @@ public class Dashboard extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BALANCE, jsonBody,
                 response -> {
-                    try {
-                        Loader.hideLoader(this);
-                        String balance = response.getString("balance");
-                        bal.setText( "\u20A6"+ balance);
-                    } catch (JSONException e) {
-                        Log.e("Balance", "Error parsing response", e);
-                    }
+                    Loader.hideLoader(this);
+                    double balance = response.optDouble("wallet_balance");
+                    bal.setText( "\u20A6 "+ balance);
+                    Log.d("Balance", "Successful");
                 }, error -> {
             Loader.hideLoader(this);
             Log.e("Balance", "Error occurred: ", error);
@@ -264,6 +269,16 @@ public class Dashboard extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    public String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input; // Return the original string if input is null or empty
+        }
+
+        char[] charArray = input.toCharArray();
+        charArray[0] = Character.toUpperCase(charArray[0]);
+
+        return new String(charArray);
+    }
 
 }
 

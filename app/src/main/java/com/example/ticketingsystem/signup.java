@@ -82,12 +82,12 @@ public class signup extends AppCompatActivity {
             } else {
                 JSONObject jsonBody = new JSONObject();
                 try {
+                    jsonBody.put("email", em);
+                    jsonBody.put("username", un.toLowerCase());
                     jsonBody.put("first_name", fn);
                     jsonBody.put("last_name", ln);
-                    jsonBody.put("username", un);
-                    jsonBody.put("email", em);
-                    jsonBody.put("phone_number", pn);
                     jsonBody.put("password", cps);
+                    jsonBody.put("phone_number", pn);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Loader.hideLoader(this);
@@ -97,7 +97,7 @@ public class signup extends AppCompatActivity {
                         response -> {
                             Log.d("Response", "SIGN UP SUCCESSFUL" + response.toString());
                             Loader.hideLoader(this);
-                            Intent i1 = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i1 = new Intent(getApplicationContext(), SignupSuccess.class);
                             i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i1);
                             finish();

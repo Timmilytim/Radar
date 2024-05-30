@@ -163,7 +163,7 @@ public class History extends AppCompatActivity {
                             "To: " + toLoc + "\n" +
                             "Booking Date: " + bookingDate + "\n" +
                             "Transport Date: " + transportDate + "\n" +
-                            "Price: " + price + "\n"
+                            "Price: \u20A6" + price + "\n"
             );
 
             // Add the TextView to the LinearLayout

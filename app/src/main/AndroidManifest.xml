@@ -17,6 +17,9 @@
         android:theme="@style/Theme.TicketingSystem"
         tools:targetApi="31">
         <activity
+            android:name=".SignupSuccess"
+            android:exported="false" />
+        <activity
             android:name=".Payment"
             android:exported="false" />
         <activity

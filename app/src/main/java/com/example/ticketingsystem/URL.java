@@ -14,6 +14,8 @@ public class URL {
 //    public static final String  VERIFICATION ="https://habeeb1234.pythonanywhere.com/verify_payment/";
     public static final String BALANCE = "https://habeeb1234.pythonanywhere.com/get_user_info/";
 
+    public static final String USERCHECK = "https://habeeb1234.pythonanywhere.com/get_user_info_with_username/";
+
     public static final String HISTORY = "https://habeeb1234.pythonanywhere.com/history/";
 
     public static final String DEBIT = "https://habeeb1234.pythonanywhere.com/debit_user/";
