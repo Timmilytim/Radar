@@ -106,12 +106,25 @@
                                 android:paddingLeft="15dp"
                                 android:paddingRight="15dp">
 
+                                <TextView
+                                    android:id="@+id/find"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="FIND YOUR WAY"
+                                    android:padding="3dp"
+                                    android:textColor="@color/white"
+                                    android:gravity="center_horizontal"
+                                    android:textSize="20sp"
+                                    android:textStyle="italic" />
+
+
                                 <RadioGroup
                                     android:id="@+id/radio_group"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
 
                                     <RadioButton
                                         android:id="@+id/one_button"

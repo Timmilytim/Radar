@@ -7,6 +7,7 @@ import static com.example.ticketingsystem.URL.FUND;
 import static com.example.ticketingsystem.URL.USERCHECK;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -161,20 +162,29 @@ public class Wallet extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, FUND, jsonBody,
                 response -> {
                     Loader.hideLoader(this);
-                    Log.d("Response", "FUND SUCCESSFUL: " + response.optString("authorization_url"));
-
+                    Log.d("Response", "FUND SUCCESSFUL: " + response.toString());
                     String authorizationUrl = response.optString("authorization_url");
 
+                    // Open the URL in a browser using ACTION_VIEW Intent
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(authorizationUrl));
+                    startActivity(intent);
 
                     // Opening the URL in a browser through the Payment
-                    Intent intent = new Intent(Wallet.this, Payment.class);
-                    intent.putExtra("URL", authorizationUrl);
-                    startActivity(intent);
+//                    Intent intent = new Intent(Wallet.this, Payment.class);
+//                    intent.putExtra("URL", au);
+//                    startActivity(intent);
 
                 }, error -> {
             Loader.hideLoader(this);
             Log.e("Error", "Error occurred: ", error);
             Toast.makeText(this, "Failed to fund wallet", Toast.LENGTH_SHORT).show();
+
+
+            if (error instanceof TimeoutError) {
+                Loader.hideLoader(this);
+                Toast.makeText(this, "Request timed out. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
 
             // To Check if it's a timeout error
 //            if (error instanceof TimeoutError) {
@@ -183,10 +193,10 @@ public class Wallet extends AppCompatActivity {
 //            }
         });
             // To  Retry the funding 3 times
-//            int maxRetries = 3;
-//            int initialTimeoutMs = 5000;
-//            float backoffMultiplier = 1.0f;
-//            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxRetries, backoffMultiplier));
+            int maxRetries = 3;
+            int initialTimeoutMs = 5000;
+            float backoffMultiplier = 1.0f;
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxRetries, backoffMultiplier));
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);

@@ -3,11 +3,14 @@ package com.example.ticketingsystem;
 import static com.example.ticketingsystem.URL.BALANCE;
 import static com.example.ticketingsystem.URL.PRICE;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +53,7 @@ public class Dashboard extends AppCompatActivity {
     private RadioButton roundTrip;
     private MaterialButton fund;
     private Button submit;
+    private TextView findWay;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -62,6 +66,16 @@ public class Dashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        findWay = findViewById(R.id.find);
+
+        ObjectAnimator moveLeftRight = ObjectAnimator.ofFloat(findWay, "translationX", 0f, 100f, -100f, 0f);
+        moveLeftRight.setDuration(2000); // duration for one complete cycle
+        moveLeftRight.setRepeatCount(ValueAnimator.INFINITE);
+        moveLeftRight.setRepeatMode(ValueAnimator.RESTART);
+        moveLeftRight.start();
+
+
         LocalTime currentTime = LocalTime.now();
 
         UserSession userSession = UserSession.getInstance();
@@ -102,7 +116,6 @@ public class Dashboard extends AppCompatActivity {
 
         int radioButtonId = radioGroup.getCheckedRadioButtonId();
         String tripType;
-
          if (radioButtonId == R.id.one_button) {
                 tripType = "one_way";
             } else if (radioButtonId == R.id.round_button) {
